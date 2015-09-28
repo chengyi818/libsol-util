@@ -30,3 +30,12 @@
 
 # Debug files
 *.dSYM/
+
+# Cscope files
+cscope.*
+tags
+
+# Others
+*~
+.*.swp
+.*.swo
