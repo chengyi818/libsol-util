@@ -13,6 +13,7 @@
 #include <fcntl.h>      /* open */
 #include "utl_logging.h"
 #include "utl_prctl.h"
+#include "utl_time.h"
 
 static UtlLogLevel                  logLevel;
 static UtlLogDestination            logDestination;

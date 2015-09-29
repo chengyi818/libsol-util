@@ -13,7 +13,7 @@
 #include "utl_time.h"
 #include "osl_time.h"
 
-void utlTm_get(CmsTimestamp *tms)
+void utlTm_get(UtlTimestamp *tms)
 {
    oslTms_get(tms);
 }

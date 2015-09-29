@@ -15,6 +15,7 @@
 
 #include <sys/types.h>
 #include <unistd.h>
+#include "utl.h"
 
 void oslPrctl_getProcessName(pid_t pid, char *name);
 #endif /* __OSL_PRCTL_H__ */

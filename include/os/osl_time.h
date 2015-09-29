@@ -10,16 +10,14 @@
  * 
  ************************************************************************/
 
-#ifndef __UTL_H__
-#define __UTL_H__
+#ifndef __OSL_TIME_H__
+#define __OSL_TIME_H__
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include "types.h"
+#include <unistd.h>
+#include <time.h>
+#include <sys/time.h>
+#include "utl.h"
+#include "utl_time.h"
 
-typedef enum
-{
-    UTLRET_SUCCESS                  =0, /**<Success. */
-} UtlRet;
-#endif /* __UTL_H__ */
+void oslTm_get(UtlTimestamp *tms);
+#endif /* __OSL_TIME_H__ */

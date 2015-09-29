@@ -10,16 +10,11 @@
  * 
  ************************************************************************/
 
-#ifndef __UTL_H__
-#define __UTL_H__
+#ifndef __UTL_PRCTL_H__
+#define __UTL_PRCTL_H__
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include "types.h"
+#include "utl.h"
+#include "osl_prctl.h"
 
-typedef enum
-{
-    UTLRET_SUCCESS                  =0, /**<Success. */
-} UtlRet;
-#endif /* __UTL_H__ */
+void utlPrctl_getProcessName(char *name);
+#endif /* __UTL_PRCTL_H__ */

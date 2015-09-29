@@ -8,30 +8,24 @@
 #
 #set your own environment option  
 CC = gcc 
-CFLAGS = -fPIC -Werror -Wfatal-errors
+CFLAGS += -fPIC -Werror -Wfatal-errors
+
+#static library use 'ar' command
+AR = ar
 
 #set your inc and lib
 INC = -I. \
-	  -I./include \
-	  -I./include/os \
+	  -I../include \
+	  -I../include/os \
 
-CURR_DIR := $(shell pwd)
-OSDIR = $(CURR_DIR)/os
 #make target lib and relevant obj
-PRG = libutil.so
-OBJS = utl_logging.o utl_prctl.o utl_time.o utl_strconv.o
-INNER_LIBS = os/osl.a
-OUTTER_LIBS = 
+PRG = osl.a
+OBJS = osl_logging.o osl_prctl.o osl_time.o
 
 #all target  
 all: $(PRG)
-$(PRG): $(INNER_LIBS) $(OBJS)
-	$(CC) $(CFLAGS) $(INC) -shared -Wl,--whole-archive,-soname,$@ -o $@ \
-	      $(OBJS) $(OSDIR)/osl.a \
-	      -Wl,-lcrypt -Wl,--no-whole-archive
-
-os/osl.a:
-	$(MAKE) -C os 
+$(PRG): $(OBJS)
+	$(AR) -rcs $@ $(OBJS)
 
 .SUFFIXES: .c .o
 .c.o:
@@ -39,7 +33,7 @@ os/osl.a:
 
 .PRONY:clean
 clean:
-	@$(MAKE) clean -C os
+	@echo "Removing linked and compiled files......"
 	rm -f $(OBJS) $(PRG)
 
 #

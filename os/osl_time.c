@@ -10,9 +10,6 @@
  * 
  ************************************************************************/
 
-#include <unistd.h>
-#include <time.h>
-#include <sys/time.h>
 #include "osl_time.h"
 
 void oslTm_get(UtlTimestamp *tms)

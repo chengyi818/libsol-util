@@ -10,7 +10,6 @@
  * 
  ************************************************************************/
 
-#include "osl_prctl.h"
 #include "utl_strconv.h"
 
 void utlPrctl_getProcessName(char *name)

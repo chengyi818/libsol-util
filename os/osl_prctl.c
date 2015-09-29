@@ -10,7 +10,6 @@
  * 
  ************************************************************************/
 #include "osl_prctl.h"
-#include "types.h"
 
 void oslPrctl_getPathName(pid_t pid, char *name)
 {
