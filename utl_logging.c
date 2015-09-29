@@ -19,7 +19,7 @@ static UtlLogLevel                  logLevel;
 static UtlLogDestination            logDestination;
 static UINT32 logHeaderMask;
 
-void utlLog_debug(UtlLogLevel level, const char *func, UINT32 lineNum, const char *pFmt, ... )
+void utlLog_log(UtlLogLevel level, const char *func, UINT32 lineNum, const char *pFmt, ... )
 {
     va_list		ap;
     char buf[MAX_LOG_LINE_LENGTH] = {0};
@@ -133,4 +133,58 @@ void utlLog_debug(UtlLogLevel level, const char *func, UINT32 lineNum, const cha
 
         va_end(ap);
     }
+}
+
+void utlLog_init(void)
+{
+    logLevel       = DEFAULT_LOG_LEVEL;
+    logDestination = DEFAULT_LOG_DESTINATION;
+    logHeaderMask  = DEFAULT_LOG_HEADER_MASK;
+
+    oslLog_init();
+
+    return;
+}
+
+void utlLog_cleanup(void)
+{
+    oslLog_cleanup();
+    return;
+}
+
+void utlLog_setLevel(UtlLogLevel level)
+{
+    logLevel = level;
+    return;
+}
+
+
+UtlLogLevel utlLog_getLevel(void)
+{
+    return logLevel;
+}
+
+void utlLog_setDestination(UtlLogDestination dest)
+{
+    logDestination = dest;
+    return;
+}
+
+
+UtlLogDestination utlLog_getDestination(void)
+{
+    return logDestination;
+}
+
+
+void utlLog_setHeaderMask(UINT32 headerMask)
+{
+    logHeaderMask = headerMask;
+    return;
+}
+
+
+UINT32 utlLog_getHeaderMask(void)
+{
+    return logHeaderMask;
 }

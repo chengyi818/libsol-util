@@ -13,6 +13,7 @@
 #ifndef __UTL_LOGGING_H__
 #define __UTL_LOGGING_H__
 
+#include <stdarg.h>
 #include "utl.h"
 /*!\file utl_log.h
  * \brief Public header file for Management System Logging API.
@@ -50,6 +51,31 @@ typedef enum
 
 #define DEFAULT_LOG_DESTINATION  LOG_DEST_STDERR
 
+/** Default log header mask */
+#define DEFAULT_LOG_HEADER_MASK (UTLLOG_HDRMASK_APPNAME|UTLLOG_HDRMASK_LEVEL|UTLLOG_HDRMASK_TIMESTAMP|UTLLOG_HDRMASK_LOCATION)
+
 #define MAX_LOG_LINE_LENGTH      512
+
+#define utlLog_debug(args...)  utlLog_log(LOG_LEVEL_DEBUG, __FUNCTION__, __LINE__, args)
+#define utlLog_notice(args...) utlLog_log(LOG_LEVEL_NOTICE, __FUNCTION__, __LINE__, args)
+#define utlLog_error(args...)  utlLog_log(LOG_LEVEL_ERR, __FUNCTION__, __LINE__, args)
+
+void utlLog_log(UtlLogLevel level, const char *func, UINT32 lineNum, const char *pFmt, ... );
+
+void utlLog_init(void);
+
+void utlLog_cleanup(void);
+
+void utlLog_setLevel(UtlLogLevel level);
+
+UtlLogLevel utlLog_getLevel(void);
+
+void utlLog_setDestination(UtlLogDestination dest);
+
+UtlLogDestination utlLog_getDestination(void);
+
+void utlLog_setHeaderMask(UINT32 headerMask);
+
+UINT32 utlLog_getHeaderMask(void);
 
 #endif /* __UTL_LOGGING_H__ */

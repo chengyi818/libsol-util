@@ -11,6 +11,7 @@
  ************************************************************************/
 
 #include "osl_time.h"
+#include "utl_logging.h"
 
 void oslTm_get(UtlTimestamp *tms)
 {
@@ -30,7 +31,7 @@ void oslTm_get(UtlTimestamp *tms)
    }
    else
    {
-      cmsLog_error("clock_gettime failed, set timestamp to 0");
+      utlLog_error("clock_gettime failed, set timestamp to 0");
       tms->sec = 0;
       tms->nsec = 0;
    }

@@ -15,5 +15,5 @@
 
 void utlTm_get(UtlTimestamp *tms)
 {
-   oslTms_get(tms);
+   oslTm_get(tms);
 }
