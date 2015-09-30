@@ -37,5 +37,8 @@ typedef struct
 } UtlTimestamp;
 
 void utlTm_get(UtlTimestamp *tms);
+void utlTm_delta(const UtlTimestamp *newTms, const UtlTimestamp *oldTms, UtlTimestamp *deltaTms);
+UINT32 utlTm_deltaInMilliSeconds(const UtlTimestamp *newTms, const UtlTimestamp *oldTms);
+void utlTm_addMilliSeconds(UtlTimestamp *tms, UINT32 ms);
 
 #endif /* __UTL_TIME_H__ */
