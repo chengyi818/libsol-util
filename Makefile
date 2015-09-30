@@ -25,7 +25,6 @@ export CFLAGS
 export LDFLAGS 
 
 LIB_DIR=/usr/lib
-CURR_DIR := $(shell pwd)
 OSDIR = $(CURR_DIR)/os
 BASICDIR = $(CURR_DIR)/basic
 
