@@ -8,7 +8,7 @@
 #
 #set your own environment option  
 LDFLAGS += -L.
-CFLAGS += $(HDR_INC)
+CFLAGS +=
 
 #make target lib and relevant obj
 PRG = osl.a
