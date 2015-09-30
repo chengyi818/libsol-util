@@ -14,10 +14,13 @@
 #include "utl_logging.h"
 #include "utl_prctl.h"
 #include "utl_time.h"
+#include "utl_strconv.h"
 
 static UtlLogLevel                  logLevel;
 static UtlLogDestination            logDestination;
 static UINT32 logHeaderMask;
+static char processName[256] = {'\0'};
+static char *logFileName = NULL;
 
 void utlLog_log(UtlLogLevel level, const char *func, UINT32 lineNum, const char *pFmt, ... )
 {
@@ -35,14 +38,11 @@ void utlLog_log(UtlLogLevel level, const char *func, UINT32 lineNum, const char 
 
         if (logHeaderMask & UTLLOG_HDRMASK_APPNAME)
         {
-            char processName[256] = {'\0'};
-            utlPrctl_getProcessName(processName);
             if (utlStr_strlen(processName) != 0) 
                 len = snprintf(buf, maxLen, "%s:", processName);
             else
                 len = snprintf(buf, maxLen, "unkown:");
         }
-
 
         if ((logHeaderMask & UTLLOG_HDRMASK_LEVEL) && (len < maxLen))
         {
@@ -71,7 +71,6 @@ void utlLog_log(UtlLogLevel level, const char *func, UINT32 lineNum, const char 
             }
         }
 
-
         /*
          * Log timestamp for both stderr and syslog because syslog's
          * timestamp is when the syslogd gets the log, not when it was
@@ -86,12 +85,10 @@ void utlLog_log(UtlLogLevel level, const char *func, UINT32 lineNum, const char 
                     ts.sec%1000, ts.nsec/NSECS_IN_MSEC);
         }
 
-
         if ((logHeaderMask & UTLLOG_HDRMASK_LOCATION) && (len < maxLen))
         {
             len += snprintf(&(buf[len]), maxLen - len, "%s:%u:", func, lineNum);
         }
-
 
         if (len < maxLen)
         {
@@ -102,15 +99,12 @@ void utlLog_log(UtlLogLevel level, const char *func, UINT32 lineNum, const char 
         if (logDestination == LOG_DEST_STDERR)
         {
             int logStdErrFd = -1;
-            logStdErrFd = open("/dev/ttyS0", O_RDWR);
-            if(logStdErrFd != -1)
-            {
-                write(logStdErrFd, buf, strlen(buf));
-                write(logStdErrFd, "\n", strlen("\n"));
-                close(logStdErrFd);
-            }
+            logStdErrFd = UTL_SRDERR;
+
+            write(logStdErrFd, buf, strlen(buf));
+            write(logStdErrFd, "\n", strlen("\n"));
         }
-        else if (logDestination == LOG_DEST_TELNET )
+        else if (logDestination == LOG_DEST_TELNET)
         {
 #ifdef DESKTOP_LINUX
             /* Fedora Desktop Linux */
@@ -126,9 +120,24 @@ void utlLog_log(UtlLogLevel level, const char *func, UINT32 lineNum, const char 
                 close(logTelnetFd);
             }
         }
-        else
+        else if (logDestination == LOG_DEST_SYSLOG)
         {
             oslLog_syslog(level, buf);
+        }
+        else
+        {
+            int logFileFd = -1;
+            if (logFileName != NULL) 
+            {
+                logFileFd = open(logFileName, (O_WRONLY|O_CREAT|O_APPEND), 0644);
+
+                if(logFileFd != -1)
+                {
+                    write(logFileFd, buf, strlen(buf));
+                    write(logFileFd, "\n", strlen("\n"));
+                    close(logFileFd);
+                }
+            }
         }
 
         va_end(ap);
@@ -142,6 +151,7 @@ void utlLog_init(void)
     logHeaderMask  = DEFAULT_LOG_HEADER_MASK;
 
     oslLog_init();
+    utlPrctl_getProcessName(processName);
 
     return;
 }
@@ -149,6 +159,12 @@ void utlLog_init(void)
 void utlLog_cleanup(void)
 {
     oslLog_cleanup();
+
+    if (logFileName != NULL) 
+    {
+        free(logFileName);
+    }
+
     return;
 }
 
@@ -187,4 +203,15 @@ void utlLog_setHeaderMask(UINT32 headerMask)
 UINT32 utlLog_getHeaderMask(void)
 {
     return logHeaderMask;
+}
+
+void utlLog_setLogFile(char *name)
+{
+    logFileName = utlStr_strdup(name);
+    return;
+}
+
+char *utlLog_getLogFile(void)
+{
+    return logFileName;
 }

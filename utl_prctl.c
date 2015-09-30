@@ -16,7 +16,7 @@ void utlPrctl_getProcessName(char *name)
 {
     char path[BUFLEN_256] = {'\0'};
 
-    oslPrctl_getPathName(path);
+    oslPrctl_getPathName(getpid(), path);
     utlStr_strcpy(name, utlStr_getBaseName(path));
 
     return;

@@ -14,6 +14,7 @@
 #define __UTL_LOGGING_H__
 
 #include <stdarg.h>
+#include <unistd.h>
 #include "utl.h"
 /*!\file utl_log.h
  * \brief Public header file for Management System Logging API.
@@ -32,7 +33,8 @@ typedef enum
 {
    LOG_DEST_STDERR  = 1,  /**< Log output to stderr. */
    LOG_DEST_SYSLOG  = 2,  /**< Log output to syslog. */
-   LOG_DEST_TELNET  = 3   /**< Log output to telnet clients. */
+   LOG_DEST_TELNET  = 3,  /**< Log output to telnet clients. */
+   LOG_DEST_FILE    = 4,  /**< Log output to telnet clients. */
 } UtlLogDestination;
 
 /** Show application name in the log line. */
@@ -50,6 +52,10 @@ typedef enum
 #define DEFAULT_LOG_LEVEL        LOG_LEVEL_ERR
 
 #define DEFAULT_LOG_DESTINATION  LOG_DEST_STDERR
+
+#define UTL_STDOUT               STDOUT_FILENO
+
+#define UTL_SRDERR               STDERR_FILENO
 
 /** Default log header mask */
 #define DEFAULT_LOG_HEADER_MASK (UTLLOG_HDRMASK_APPNAME|UTLLOG_HDRMASK_LEVEL|UTLLOG_HDRMASK_TIMESTAMP|UTLLOG_HDRMASK_LOCATION)
@@ -78,4 +84,7 @@ void utlLog_setHeaderMask(UINT32 headerMask);
 
 UINT32 utlLog_getHeaderMask(void);
 
+void utlLog_setLogFile(char *name);
+
+char *utlLog_getLogFile(void);
 #endif /* __UTL_LOGGING_H__ */
