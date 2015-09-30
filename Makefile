@@ -10,11 +10,12 @@
 CC = gcc
 AR = ar
 
+CURR_DIR := $(shell pwd)
 MACRO_DEFINES = -DUTL_MEM_LEAK_TRACING 
-HDR_INC = -I. \
-		  -I./include \
-		  -I./include/os \
-		  -I./include/basic \
+HDR_INC = -I$(CURR_DIR) \
+		  -I$(CURR_DIR)/include \
+		  -I$(CURR_DIR)/include/os \
+		  -I$(CURR_DIR)/include/basic \
 
 LDFLAGS = -L.
 CFLAGS = -fPIC -Werror -Wfatal-errors $(HDR_INC) $(MACRO_DEFINES)

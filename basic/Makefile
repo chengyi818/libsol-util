@@ -7,11 +7,6 @@
 # #
 #
 #set your own environment option  
-HDR_INC = -I. \
-		  -I.. \
-		  -I../include \
-		  -I../include/basic \
-
 LDFLAGS += -L.
 CFLAGS += $(HDR_INC)
 
