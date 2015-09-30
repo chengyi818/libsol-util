@@ -8,15 +8,15 @@
 #
 #set your own environment option  
 CC = gcc 
-CFLAGS += -fPIC -Werror -Wfatal-errors
-
-#static library use 'ar' command
 AR = ar
 
-#set your inc and lib
-INC = -I. \
-	  -I../include \
-	  -I../include/os \
+HDR_INC = -I. \
+		  -I.. \
+		  -I../include \
+		  -I../include/os \
+
+LDFLAGS = -L.
+CFLAGS += -fPIC -Werror -Wfatal-errors $(HDR_INC)
 
 #make target lib and relevant obj
 PRG = osl.a
@@ -29,7 +29,7 @@ $(PRG): $(OBJS)
 
 .SUFFIXES: .c .o
 .c.o:
-	$(CC) $(CFLAGS) $(INC) -c $*.c -o $*.o
+	$(CC) $(CFLAGS) -c $*.c -o $*.o
 
 .PRONY:clean
 clean:
