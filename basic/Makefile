@@ -10,14 +10,14 @@
 HDR_INC = -I. \
 		  -I.. \
 		  -I../include \
-		  -I../include/os \
+		  -I../include/basic \
 
 LDFLAGS += -L.
 CFLAGS += $(HDR_INC)
 
 #make target lib and relevant obj
-PRG = osl.a
-OBJS = osl_logging.o osl_prctl.o osl_time.o
+PRG = basic.a
+OBJS = bget.o
 
 #all target  
 all: $(PRG)
