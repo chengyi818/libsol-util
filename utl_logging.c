@@ -98,11 +98,22 @@ void utlLog_log(UtlLogLevel level, const char *func, UINT32 lineNum, const char 
 
         if (logDestination == LOG_DEST_STDERR)
         {
-            int logStdErrFd = -1;
-            logStdErrFd = UTL_SRDERR;
-
-            write(logStdErrFd, buf, strlen(buf));
-            write(logStdErrFd, "\n", strlen("\n"));
+            switch(level)
+            {
+                case LOG_LEVEL_ERR:
+                    fprintf(stderr, "\033[1;31;40m%s\033[0m\n", buf);
+                    break;
+                case LOG_LEVEL_NOTICE:
+                    fprintf(stderr, "\033[1;33;40m%s\033[0m\n", buf);
+                    break;
+                case LOG_LEVEL_DEBUG:
+                    fprintf(stderr, "\033[1;32;40m%s\033[0m\n", buf);
+                    break;
+                default:
+                    fprintf(stderr, "\033[1;32;40m%s\033[0m\n", buf);
+                    break;
+            }
+            fflush(stderr);
         }
         else if (logDestination == LOG_DEST_TELNET)
         {
