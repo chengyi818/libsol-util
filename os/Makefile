@@ -12,7 +12,7 @@ CFLAGS +=
 
 #make target lib and relevant obj
 PRG = osl.a
-OBJS = osl_logging.o osl_prctl.o osl_time.o
+OBJS = osl_logging.o osl_prctl.o osl_time.o osl_memory.o
 
 #all target  
 all: $(PRG)
