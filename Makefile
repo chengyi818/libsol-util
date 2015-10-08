@@ -18,7 +18,7 @@ HDR_INC = -I$(CURR_DIR) \
 		  -I$(CURR_DIR)/include/basic \
 
 LDFLAGS = -L.
-CFLAGS = -fPIC -Wall -Werror -Wfatal-errors $(HDR_INC) $(MACRO_DEFINES)
+CFLAGS = -g -fPIC -Wall -Werror -Wfatal-errors $(HDR_INC) $(MACRO_DEFINES)
 export CC
 export AR
 export CFLAGS

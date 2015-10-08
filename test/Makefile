@@ -10,14 +10,16 @@
 CC = gcc 
 AR = ar
 
+MACRO_DEFINES = -DUTL_MEM_LEAK_TRACING -DUTL_MEM_DEBUG -DDESKTOP_LINUX
 HDR_INC = -I. \
 		  -I.. \
 		  -I../include \
 		  -I../include/os \
+		  -I../include/basic \
 
 LDFLAGS += -L.
 LIBS = -lsol-util
-CFLAGS += -fPIC -Werror -Wfatal-errors $(HDR_INC) $(LIBS)
+CFLAGS += -g -fPIC -Wall -Werror -Wfatal-errors $(HDR_INC) $(LIBS) $(MACRO_DEFINES)
 
 #make target lib and relevant obj
 PRG = test

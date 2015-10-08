@@ -82,21 +82,37 @@ void utl_memory_test(void)
     char *ptr2 = NULL;
     char *ptr3 = NULL;
     char *ptr4 = NULL;
+    char *str  = "I'm sphantix, who are you?";
 
     utlLog_init();
     utlLog_setLevel(LOG_LEVEL_DEBUG);
 
     ptr1 = utlMem_alloc(256,ALLOC_ZEROIZE);
     strcpy(ptr1, "hello, world!");
-    
-    utlLog_debug("ptr1 = %s",ptr1);
     utlMem_dumpTraceAll();
+    utlLog_debug("ptr1 = %s",ptr1);
+
+    ptr2 = utlMem_strdup("I love the world");
+    utlMem_dumpTraceAll();
+    utlLog_debug("ptr2 = %s",ptr2);
+
+    UTLMEM_REPLACE_STRING(ptr3, "I'm the king of the world");
+    utlMem_dumpTraceAll();
+    utlLog_debug("ptr3 = %s",ptr3);
+
+    REPLACE_STRING_IF_NOT_EQUAL(ptr4, str);
+    utlMem_dumpTraceAll();
+    utlLog_debug("ptr4 = %s",ptr4);
 
     utlMem_free(ptr1);
+    UTLMEM_FREE_BUF_AND_NULL_PTR(ptr2);
+    UTLMEM_FREE_BUF_AND_NULL_PTR(ptr3);
+    UTLMEM_FREE_BUF_AND_NULL_PTR(ptr4);
 
     utlLog_cleanup();
     return; 
 }
+
 int main(int argc, const char *argv[])
 {
     utl_logging_test();
