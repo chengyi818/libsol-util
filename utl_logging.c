@@ -15,6 +15,7 @@
 #include "utl_prctl.h"
 #include "utl_time.h"
 #include "utl_strconv.h"
+#include "utl_memory.h"
 
 static UtlLogLevel                  logLevel;
 static UtlLogDestination            logDestination;
@@ -173,7 +174,7 @@ void utlLog_cleanup(void)
 
     if (logFileName != NULL) 
     {
-        free(logFileName);
+        utlMem_free(logFileName);
     }
 
     return;
@@ -218,7 +219,7 @@ UINT32 utlLog_getHeaderMask(void)
 
 void utlLog_setLogFile(char *name)
 {
-    logFileName = utlStr_strdup(name);
+    logFileName = utlMem_strdup(name);
     return;
 }
 

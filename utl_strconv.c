@@ -197,18 +197,6 @@ SINT32 utlStr_strlen(const char *src)
    return strlen(str);
 } 
 
-char *utlStr_strdup(const char *src)
-{
-   char *str = (char *)src;
-
-   if (str == NULL)
-   {
-       return NULL;
-   }
-
-   return strdup(str);   
-}
-
 char *utlStr_getBaseName(char *path)
 {
     char *ptr = NULL;
