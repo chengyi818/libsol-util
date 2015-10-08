@@ -19,28 +19,83 @@
 /** zeroize the buffer before returning it to the caller. */
 #define ALLOC_ZEROIZE          0x01
 
-/** allocate memory in the shared memory region. */
-#define ALLOC_SHARED_MEM       0x02
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+void *utlMem_alloc(UINT32 size, UINT32 allocFlags);
+void *utlMem_realloc(void *origBuf, UINT32 size);
+void utlMem_free(void *buf);
+char *utlMem_strdup(const char *str);
+char *utlMem_strdupFlags(const char *str, UINT32 flags);
+char *utlMem_strndup(const char *str, UINT32 maxlen);
+char *utlMem_strndupFlags(const char *str, UINT32 maxlen, UINT32 flags);
+UINT32 utlMem_strnlen(const char *str, UINT32 maxlen, UBOOL8 *isTerminated);
+
+/** Free a buffer and set the pointer to null.
+ */
+#define UTLMEM_FREE_BUF_AND_NULL_PTR(p) \
+   do { \
+      if ((p) != NULL) {utlMem_free((p)); (p) = NULL;}   \
+   } while (0)
+   
+
+/** Free the existing char pointer and set it to a copy of the specified string.
+ */
+#define UTLMEM_REPLACE_STRING(p, s) \
+   do {\
+      if ((p) != NULL) {utlMem_free((p));} \
+      (p) = utlMem_strdup((s)); \
+   } while (0)
+
+
+/** Free the existing char pointer and set it to a copy of the specified string
+ *  and specify the way the string is allocated.
+ */
+#define UTLMEM_REPLACE_STRING_FLAGS(p, s, f) \
+   do {\
+      if ((p) != NULL) {utlMem_free((p));} \
+      (p) = utlMem_strdupFlags((s), (f)); \
+   } while (0)
+
+
+/** Replace the existing string p if it is different than the new string s
+ */
+#define REPLACE_STRING_IF_NOT_EQUAL(p, s)    \
+	if ((p) != NULL) { \
+      if (strcmp((p), (s))) { utlMem_free((p)); (p) = utlMem_strdup((s)); } \
+	} else { \
+		(p) = utlMem_strdup((s));                 \
+	} 
+
+
+/** Replace the existing string p if it is different than the new string s
+ * and specify the way the string is allocated.
+ */
+#define REPLACE_STRING_IF_NOT_EQUAL_FLAGS(p, s, f)     \
+	if ((p) != NULL) { \
+      if (strcmp((p), (s))) {utlMem_free((p)); (p) = utlMem_strdupFlags((s), (f)); } \
+	} else { \
+		(p) = utlMem_strdupFlags((s), (f));       \
+	}
 
 /* Memory Statistics structure.
  */
 typedef struct
 {
-   UINT32 shmAllocStart; /**< Start of shared memory alloc pool */
-   UINT32 shmAllocEnd;   /**< End of shared memory alloc pool */
-   UINT32 shmTotalBytes; /**< Total size of shm pool, in bytes */
-   UINT32 shmBytesAllocd;/**< Number of bytes allocated/in-use from shm pool */
-   UINT32 shmNumAllocs;  /**< Number of shared memory allocs */
-   UINT32 shmNumFrees;   /**< Number of shared memory frees */
    UINT32 bytesAllocd;   /**< Number of private heap bytes alloc'ed */
    UINT32 numAllocs;     /**< Number of private heap allocs */
    UINT32 numFrees;      /**< Number of private heap frees */
 } UtlMemStats;
 
+void utlMem_getStats(UtlMemStats *stats);
+void utlMem_dumpMemStats();
+
+#ifdef UTL_MEM_LEAK_TRACING
+void utlMem_dumpTraceAll();
+void utlMem_dumpTrace50();
+void utlMem_dumpTraceClones();
+#endif
 
 #ifdef __cplusplus
 } /* end of extern "C" */

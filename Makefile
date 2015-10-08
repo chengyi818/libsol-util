@@ -11,7 +11,7 @@ CC = gcc
 AR = ar
 
 CURR_DIR := $(shell pwd)
-MACRO_DEFINES = -DUTL_MEM_LEAK_TRACING 
+MACRO_DEFINES = -DUTL_MEM_LEAK_TRACING -DUTL_MEM_DEBUG -DDESKTOP_LINUX
 HDR_INC = -I$(CURR_DIR) \
 		  -I$(CURR_DIR)/include \
 		  -I$(CURR_DIR)/include/os \
@@ -30,7 +30,7 @@ BASICDIR = $(CURR_DIR)/basic
 
 #make target lib and relevant obj, sol is short for sphantix's own lib
 PRG = libsol-util.so
-OBJS = utl_logging.o utl_prctl.o utl_time.o utl_strconv.o utl_assert.o
+OBJS = utl_logging.o utl_prctl.o utl_time.o utl_strconv.o utl_assert.o utl_memory.o
 INNER_LIBS = basic/basic.a os/osl.a
 OUTTER_LIBS = 
 

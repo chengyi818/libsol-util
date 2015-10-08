@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "utl_logging.h"
+#include "utl_memory.h"
 
 void utl_logging_test(void)
 {
@@ -75,8 +76,30 @@ void utl_logging_test(void)
     utlLog_cleanup();
 }
 
+void utl_memory_test(void)
+{
+    char *ptr1 = NULL;
+    char *ptr2 = NULL;
+    char *ptr3 = NULL;
+    char *ptr4 = NULL;
+
+    utlLog_init();
+    utlLog_setLevel(LOG_LEVEL_DEBUG);
+
+    ptr1 = utlMem_alloc(256,ALLOC_ZEROIZE);
+    strcpy(ptr1, "hello, world!");
+    
+    utlLog_debug("ptr1 = %s",ptr1);
+    utlMem_dumpTraceAll();
+
+    utlMem_free(ptr1);
+
+    utlLog_cleanup();
+    return; 
+}
 int main(int argc, const char *argv[])
 {
     utl_logging_test();
+    utl_memory_test();
     return 0;
 }
