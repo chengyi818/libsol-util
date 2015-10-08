@@ -176,6 +176,7 @@ void utlLog_cleanup(void)
     if (logFileName != NULL) 
     {
         utlMem_free(logFileName);
+        logFileName = NULL;
     }
 
     return;
