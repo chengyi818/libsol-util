@@ -18,4 +18,5 @@
 #include "utl.h"
 
 void oslPrctl_getProcessName(pid_t pid, char *name);
+void oslPrctl_signalProcess(SINT32 pid, SINT32 sig);
 #endif /* __OSL_PRCTL_H__ */

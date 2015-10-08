@@ -9,7 +9,9 @@
 #
  * 
  ************************************************************************/
+
 #include "osl_prctl.h"
+#include "utl_logging.h"
 
 void oslPrctl_getPathName(pid_t pid, char *name)
 {
@@ -24,3 +26,23 @@ void oslPrctl_getPathName(pid_t pid, char *name)
     pclose(fp);
     return;
 }
+
+void oslPrctl_signalProcess(SINT32 pid, SINT32 sig)
+{
+   SINT32 rc;
+
+   if (pid <= 0)
+   {
+      utlLog_error("bad pid %d", pid);
+      return;
+   }
+
+   if ((rc = kill(pid, sig)) < 0)
+   {
+      utlLog_error("invalid signal(%d) or pid(%d)", sig, pid);
+      return;
+   }
+
+   return;
+}
+

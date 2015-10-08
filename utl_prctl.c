@@ -11,6 +11,7 @@
  ************************************************************************/
 
 #include "utl_strconv.h"
+#include "utl_prctl.h"
 
 void utlPrctl_getProcessName(char *name)
 {
@@ -19,5 +20,11 @@ void utlPrctl_getProcessName(char *name)
     oslPrctl_getPathName(getpid(), path);
     utlStr_strcpy(name, utlStr_getBaseName(path));
 
+    return;
+}
+
+void utlPrctl_signalProcess(SINT32 pid, SINT32 sig)
+{
+    oslPrctl_signalProcess(pid, sig);
     return;
 }
