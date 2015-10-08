@@ -4,6 +4,9 @@
 
 */
 
+#ifndef __BGET_H__
+#define __BGET_H__
+
 #define  _(x)  x		      /* If compiler knows prototypes */
 
 typedef long bufsize;
@@ -35,3 +38,5 @@ int 	bpoolv	    _((void *pool));
 #if defined(__cplusplus)
 }
 #endif
+
+#endif /* __BGET_H__ */
