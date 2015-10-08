@@ -10,6 +10,7 @@
  * 
  ************************************************************************/
 
+#include <signal.h>
 #include "osl_prctl.h"
 #include "utl_logging.h"
 

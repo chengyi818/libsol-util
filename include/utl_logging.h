@@ -16,6 +16,7 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include "utl.h"
+
 /*!\file utl_log.h
  * \brief Public header file for Management System Logging API.
  * Applications which need to call Logging API functions must

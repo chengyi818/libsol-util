@@ -12,6 +12,7 @@
 
 #include "utl_strconv.h"
 #include "utl_prctl.h"
+#include "osl_prctl.h"
 
 void utlPrctl_getProcessName(char *name)
 {

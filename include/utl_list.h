@@ -171,7 +171,7 @@ static inline void dlist_move(struct dlist_node *list, struct dlist_node *head)
  * @list: the entry to move
  * @head: the head that will follow our entry
  */
-static inline void list_move_tail(struct dlist_node *list, struct dlist_node *head)
+static inline void dlist_move_tail(struct dlist_node *list, struct dlist_node *head)
 {
 	__dlist_del_entry(list);
 	dlist_add_tail(list, head);

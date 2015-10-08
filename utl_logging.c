@@ -16,6 +16,7 @@
 #include "utl_time.h"
 #include "utl_strconv.h"
 #include "utl_memory.h"
+#include "osl_logging.h"
 
 static UtlLogLevel                  logLevel;
 static UtlLogDestination            logDestination;
