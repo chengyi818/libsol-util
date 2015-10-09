@@ -12,7 +12,7 @@ CFLAGS +=
 
 #make target lib and relevant obj
 PRG = basic.a
-OBJS = bget.o
+OBJS = bget.o rbtree.o
 
 #all target  
 all: $(PRG)
