@@ -648,7 +648,7 @@ void rb_replace_node(struct rb_node *victim, struct rb_node *new,
     *new = *victim;
 }
 
-static inline void rb_link_node(struct rb_node * node, struct rb_node * parent,
+inline void rb_link_node(struct rb_node * node, struct rb_node * parent,
         struct rb_node ** rb_link)
 {
     node->rb_parent_color = (unsigned long)parent;

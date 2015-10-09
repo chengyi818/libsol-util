@@ -157,4 +157,6 @@ struct rb_node *rb_next_postorder(const struct rb_node *);
 void rb_replace_node(struct rb_node *victim, struct rb_node *new, 
         struct rb_root *root);
 
+inline void rb_link_node(struct rb_node * node, struct rb_node * parent,
+        struct rb_node ** rb_link);
 #endif	/* __RBTREE_H__ */
