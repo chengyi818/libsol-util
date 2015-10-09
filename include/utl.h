@@ -20,7 +20,8 @@
 
 typedef enum
 {
-    UTLRET_SUCCESS                  =0, /**<Success. */
+    UTLRET_SUCCESS                  =0,             /**<Success. */
+    UTLRET_RESOURCE_EXCEEDED        =9004,          /**< Resource exceeded. */
 } UtlRet;
 
 #ifndef __always_inline
