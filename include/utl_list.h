@@ -353,27 +353,6 @@ static inline void dlist_prepend(struct dlist_node *new_node, struct dlist_node 
     existing->prev = new_node;
 }
 
-/** Return byte offset of the specified member.
- *
- * This is defined in stddef.h for MIPS, but not defined
- * on LINUX desktop systems.  Play it safe and just define
- * it here for all build types.
- */
-#undef offsetof
-#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
-
-
-/** cast a member of a structure out to the containing structure
- *
- * @ptr:	the pointer to the member.
- * @type:	the type of the container struct this is embedded in.
- * @member:	the name of the member within the struct.
- *
- */
-#define container_of(ptr, type, member) ({			\
-        const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
-        (type *)( (char *)__mptr - offsetof(type,member) );})
-
 
 #define dlist_entry(ptr, type, member) \
     container_of(ptr, type, member)

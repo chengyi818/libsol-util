@@ -22,7 +22,6 @@
 */
 
 #include "rbtree.h"
-#include "utl.h"
 
 
 /*

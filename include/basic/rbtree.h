@@ -29,9 +29,7 @@
 #ifndef	__RBTREE_H__
 #define	__RBTREE_H__
 
-#ifndef __always_inline
-#define __always_inline		inline __attribute__((always_inline))
-#endif
+#include "utl.h"
 
 struct rb_node {
     unsigned long  __rb_parent_color;
