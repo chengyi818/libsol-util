@@ -32,7 +32,7 @@
 #include "utl.h"
 
 struct rb_node {
-    unsigned long  __rb_parent_color;
+    unsigned long  rb_parent_color;
     struct rb_node *rb_right;
     struct rb_node *rb_left;
 } __attribute__((aligned(sizeof(long))));
@@ -43,7 +43,7 @@ struct rb_root {
 };
 
 
-#define rb_parent(r)   ((struct rb_node *)((r)->__rb_parent_color & ~3))
+#define rb_parent(r)   ((struct rb_node *)((r)->rb_parent_color & ~3))
 
 #define RB_ROOT	(struct rb_root) { NULL, }
 #define	rb_entry(ptr, type, member) container_of(ptr, type, member)
@@ -52,9 +52,9 @@ struct rb_root {
 
 /* 'empty' nodes are nodes that are known not to be inserted in an rbtree */
 #define RB_EMPTY_NODE(node)  \
-    ((node)->__rb_parent_color == (unsigned long)(node))
+    ((node)->rb_parent_color == (unsigned long)(node))
 #define RB_CLEAR_NODE(node)  \
-    ((node)->__rb_parent_color = (unsigned long)(node))
+    ((node)->rb_parent_color = (unsigned long)(node))
 
 
 void rb_insert_color(struct rb_node *, struct rb_root *);
@@ -135,9 +135,9 @@ rbstatic const struct rb_augment_callbacks rbname = {			\
 #define __rb_color(pc)     ((pc) & 1)
 #define __rb_is_black(pc)  __rb_color(pc)
 #define __rb_is_red(pc)    (!__rb_color(pc))
-#define rb_color(rb)       __rb_color((rb)->__rb_parent_color)
-#define rb_is_red(rb)      __rb_is_red((rb)->__rb_parent_color)
-#define rb_is_black(rb)    __rb_is_black((rb)->__rb_parent_color)
+#define rb_color(rb)       __rb_color((rb)->rb_parent_color)
+#define rb_is_red(rb)      __rb_is_red((rb)->rb_parent_color)
+#define rb_is_black(rb)    __rb_is_black((rb)->rb_parent_color)
 
 void rb_insert_color(struct rb_node *, struct rb_root *);
 void rb_erase(struct rb_node *, struct rb_root *);

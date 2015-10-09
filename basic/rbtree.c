@@ -46,12 +46,12 @@
 
 static inline void rb_set_parent(struct rb_node *rb, struct rb_node *p)
 {
-    rb->__rb_parent_color = rb_color(rb) | (unsigned long)p;
+    rb->rb_parent_color = rb_color(rb) | (unsigned long)p;
 }
 
 static inline void rb_set_parent_color(struct rb_node *rb, struct rb_node *p, int color)
 {
-    rb->__rb_parent_color = (unsigned long)p | color;
+    rb->rb_parent_color = (unsigned long)p | color;
 }
 
 static inline void __rb_change_child(struct rb_node *old, struct rb_node *new,
@@ -68,12 +68,12 @@ static inline void __rb_change_child(struct rb_node *old, struct rb_node *new,
 
 static inline void rb_set_black(struct rb_node *rb)
 {
-    rb->__rb_parent_color |= RB_BLACK;
+    rb->rb_parent_color |= RB_BLACK;
 }
 
 static inline struct rb_node *rb_red_parent(struct rb_node *red)
 {
-    return (struct rb_node *)red->__rb_parent_color;
+    return (struct rb_node *)red->rb_parent_color;
 }
 
 /*
@@ -85,7 +85,7 @@ static inline void __rb_rotate_set_parents(struct rb_node *old, struct rb_node *
         struct rb_root *root, int color)
 {
     struct rb_node *parent = rb_parent(old);
-    new->__rb_parent_color = old->__rb_parent_color;
+    new->rb_parent_color = old->rb_parent_color;
     rb_set_parent_color(old, new, color);
     __rb_change_child(old, new, parent, root);
 }
@@ -394,18 +394,18 @@ static __always_inline struct rb_node * __rb_erase_augmented(struct rb_node *nod
          * and node must be black due to 4). We adjust colors locally
          * so as to bypass __rb_erase_color() later on.
          */
-        pc = node->__rb_parent_color;
+        pc = node->rb_parent_color;
         parent = __rb_parent(pc);
         __rb_change_child(node, child, parent, root);
         if (child) {
-            child->__rb_parent_color = pc;
+            child->rb_parent_color = pc;
             rebalance = NULL;
         } else
             rebalance = __rb_is_black(pc) ? parent : NULL;
         tmp = parent;
     } else if (!child) {
         /* Still case 1, but this time the child is node->rb_left */
-        tmp->__rb_parent_color = pc = node->__rb_parent_color;
+        tmp->rb_parent_color = pc = node->rb_parent_color;
         parent = __rb_parent(pc);
         __rb_change_child(node, tmp, parent, root);
         rebalance = NULL;
@@ -456,16 +456,16 @@ static __always_inline struct rb_node * __rb_erase_augmented(struct rb_node *nod
         successor->rb_left = tmp = node->rb_left;
         rb_set_parent(tmp, successor);
 
-        pc = node->__rb_parent_color;
+        pc = node->rb_parent_color;
         tmp = __rb_parent(pc);
         __rb_change_child(node, successor, tmp, root);
         if (child2) {
-            successor->__rb_parent_color = pc;
+            successor->rb_parent_color = pc;
             rb_set_parent_color(child2, parent, RB_BLACK);
             rebalance = NULL;
         } else {
-            unsigned long pc2 = successor->__rb_parent_color;
-            successor->__rb_parent_color = pc;
+            unsigned long pc2 = successor->rb_parent_color;
+            successor->rb_parent_color = pc;
             rebalance = __rb_is_black(pc2) ? parent : NULL;
         }
         tmp = successor;
@@ -651,7 +651,7 @@ void rb_replace_node(struct rb_node *victim, struct rb_node *new,
 static inline void rb_link_node(struct rb_node * node, struct rb_node * parent,
         struct rb_node ** rb_link)
 {
-    node->__rb_parent_color = (unsigned long)parent;
+    node->rb_parent_color = (unsigned long)parent;
     node->rb_left = node->rb_right = NULL;
 
     *rb_link = node;
