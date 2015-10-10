@@ -31,7 +31,7 @@ BASICDIR = $(CURR_DIR)/basic
 #make target lib and relevant obj, sol is short for sphantix's own lib
 PRG = libsol-util.so
 OBJS = utl_logging.o utl_prctl.o utl_time.o utl_strconv.o \
-	   utl_assert.o utl_memory.o utl_timer.o
+	   utl_assert.o utl_memory.o utl_timer.o utl_ini_parser.o
 INNER_LIBS = basic/basic.a os/osl.a
 OUTTER_LIBS = 
 
