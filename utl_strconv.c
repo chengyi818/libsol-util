@@ -61,6 +61,37 @@ void utlStr_strToUpper(char *string)
    }
 }
 
+char *utlStr_strTrim(char* str)
+{
+	char* p = NULL;
+
+	p = str + strlen(str) - 1;
+
+	while(p != str && isspace(*p)) 
+	{
+		*p = '\0';
+		p--;
+	}
+
+	p = str;
+	while(*p != '\0' && isspace(*p)) p++;
+
+	if(p != str)
+	{
+		char* s = p;
+		char* d = str;
+		while(*s != '\0')
+		{
+			*d = *s;
+			d++;
+			s++;
+		}
+		*d = '\0';
+	}
+
+	return str;
+}
+
 SINT32 utlStr_strcmp(const char *s1, const char *s2)
 {
    char emptyStr = '\0';

@@ -21,6 +21,7 @@ UtlRet utlStr_strtol64(const char *str, char **endptr, SINT32 base, SINT64 *val)
 UtlRet utlStr_strtoul64(const char *str, char **endptr, SINT32 base, UINT64 *val);
 void utlStr_strToLower(char *string);
 void utlStr_strToUpper(char *string);
+char *utlStr_strTrim(char* str);
 SINT32 utlStr_strcmp(const char *s1, const char *s2);
 SINT32 utlStr_strcasecmp(const char *s1, const char *s2);
 SINT32 utlStr_strncmp(const char *s1, const char *s2, SINT32 n);
