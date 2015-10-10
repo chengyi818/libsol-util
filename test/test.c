@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include "utl_logging.h"
 #include "utl_memory.h"
+#include "utl_timer.h"
+
+void *tmrHandle = NULL;
 
 void utl_logging_test(void)
 {
@@ -113,9 +116,100 @@ void utl_memory_test(void)
     return; 
 }
 
+void utl_timer_func1(void *handle)
+{
+    printf("this is the first timer func handler!\n");
+}
+
+void utl_timer_func2(void *handle)
+{
+    printf("this is the second timer func handler!\n");
+    printf("str = %s\n",(char *)handle);
+}
+
+void utl_sleep(int seconds)
+{
+    sleep(seconds+1);
+}
+
+void utl_timer_test(void)
+{
+    char *string1 = "timer test!";
+    UINT32 ms = 0;
+
+    utlLog_init();
+    utlLog_setLevel(LOG_LEVEL_DEBUG);
+
+    utlTmr_init(&tmrHandle);
+
+    utlTmr_set(tmrHandle, utl_timer_func1, NULL, 10*1000, "timer_test1");
+    utlTmr_dumpEvents(tmrHandle);
+    utlLog_debug("total timer events = %d", utlTmr_getNumberOfEvents(tmrHandle));
+
+    utlTmr_set(tmrHandle, utl_timer_func2, string1 , 50*1000, "timer_test2");
+
+    utlTmr_dumpEvents(tmrHandle);
+    utlLog_debug("total timer events = %d", utlTmr_getNumberOfEvents(tmrHandle));
+
+    if(utlTmr_getTimeToNextEvent(tmrHandle, &ms) == UTLRET_SUCCESS)
+    {
+        utl_sleep((ms/1000));
+    }
+
+    utlTmr_executeExpiredEvents(tmrHandle);
+    utlTmr_dumpEvents(tmrHandle);
+    utlLog_debug("total timer events = %d", utlTmr_getNumberOfEvents(tmrHandle));
+
+    utlTmr_replaceIfSooner(tmrHandle, utl_timer_func2, string1 , 20*1000, "timer_test2");
+    utlTmr_dumpEvents(tmrHandle);
+    utlLog_debug("total timer events = %d", utlTmr_getNumberOfEvents(tmrHandle));
+
+#if 1
+    if(utlTmr_getTimeToNextEvent(tmrHandle, &ms) == UTLRET_SUCCESS)
+    {
+        utl_sleep((ms/1000));
+    }
+
+    utlTmr_executeExpiredEvents(tmrHandle);
+    utlTmr_dumpEvents(tmrHandle);
+    utlLog_debug("total timer events = %d", utlTmr_getNumberOfEvents(tmrHandle));
+#endif
+
+    utlTmr_cleanup(&tmrHandle);
+    utlLog_cleanup();
+}
+
+void print_usage(void)
+{
+    printf("Usage: test [syslog|memory|timer]\n");
+    printf("Example:\n");
+    printf("       test syslog       --log utilities test\n");
+}
+
 int main(int argc, const char *argv[])
 {
-    utl_logging_test();
-    utl_memory_test();
+    if(argc != 2)
+    {
+        print_usage();
+    }
+    else
+    {
+        if(!strncasecmp(argv[1], "syslog", 6))
+        {
+            utl_logging_test();
+        }
+        else if (!strncasecmp(argv[1], "memory", 6)) 
+        {
+            utl_memory_test();
+        }
+        else if (!strncasecmp(argv[1], "timer", 5)) 
+        {
+            utl_timer_test();
+        }
+        else
+        {
+            print_usage();
+        }
+    }
     return 0;
 }
