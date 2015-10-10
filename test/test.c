@@ -2,8 +2,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include "utl_logging.h"
+#include "utl_strconv.h"
 #include "utl_memory.h"
 #include "utl_timer.h"
+#include "utl_ini_parser.h"
+#include "test.h"
 
 void *tmrHandle = NULL;
 
@@ -179,9 +182,88 @@ void utl_timer_test(void)
     utlLog_cleanup();
 }
 
+UBOOL8 fPortSet(const char *name, const char *value)
+{
+    utlLog_debug("name = %s, value = %s", name, value);
+    return TRUE;
+}
+
+UBOOL8 fNumSet(const char *name, const char *value)
+{
+    utlLog_debug("name = %s, value = %s", name, value);
+    return TRUE;
+}
+
+UBOOL8 fUrlSet(const char *name, const char *value)
+{
+    utlLog_debug("name = %s, value = %s", name, value);
+    return TRUE;
+}
+
+UBOOL8 fPathSet(const char *name, const char *value)
+{
+    utlLog_debug("name = %s, value = %s", name, value);
+    return TRUE;
+}
+
+IniNodeDesc basicDesc[] = {
+    {"port", fPortSet, NULL},
+    {"num", fNumSet, NULL},
+    {NULL, NULL}
+};
+
+IniNodeDesc serverDesc[] = {
+    {"url", fUrlSet, NULL},
+    {"path", fPathSet, NULL},
+    {NULL, NULL}
+};
+
+IniNodeDesc groupDesc[] = {
+    {"Basic", NULL, basicDesc},
+    {"Server", NULL, serverDesc},
+    {NULL, NULL}
+};
+
+UBOOL8 valueHandler(UtlIniValue *pair)
+{
+    int i,j;
+
+    for(i=0; groupDesc[i].tagName != NULL; i++)
+    {
+        if(!utlStr_strcmp(pair->group, groupDesc[i].tagName))
+        {
+            if(groupDesc[i].setIniFunc)
+                groupDesc[i].setIniFunc(pair->key, pair->value);
+            
+            if (groupDesc[i].leafNode) 
+            {
+                for (j = 0; groupDesc[i].leafNode[j].tagName != NULL; j++) 
+                {
+                    if(!utlStr_strcmp(pair->key, groupDesc[i].leafNode[j].tagName))
+                        groupDesc[i].leafNode[j].setIniFunc(pair->key, pair->value);
+                }
+            }
+
+        }
+    }
+    return TRUE;
+}
+
+void utl_ini_parser_test(void)
+{
+    char* buffer = strdup("[Basic]\nport=10\nnum=20\n[Server]\nurl=http://baidu.com\npath=/auth100");
+
+    utlLog_init();
+    utlLog_setLevel(LOG_LEVEL_DEBUG);
+
+    utl_ini_parser(buffer,'#','=',valueHandler);
+
+    utlLog_cleanup();
+}
+
 void print_usage(void)
 {
-    printf("Usage: test [syslog|memory|timer]\n");
+    printf("Usage: test [syslog|memory|timer|iniparser]\n");
     printf("Example:\n");
     printf("       test syslog       --log utilities test\n");
 }
@@ -205,6 +287,10 @@ int main(int argc, const char *argv[])
         else if (!strncasecmp(argv[1], "timer", 5)) 
         {
             utl_timer_test();
+        }
+        else if (!strncasecmp(argv[1], "iniparser", 9)) 
+        {
+            utl_ini_parser_test();
         }
         else
         {

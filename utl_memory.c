@@ -71,7 +71,7 @@ static void initAllocSeq(void)
 
    srand(tms.nsec);
    allocSeq = rand() << 16;
-   utlLog_debug("allocSeq=%lu\n", allocSeq);
+   utlLog_debug("allocSeq=%lu", allocSeq);
 
    return;
 }
