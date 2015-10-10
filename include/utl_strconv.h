@@ -15,6 +15,10 @@
 
 #include "utl.h"
 
+UtlRet utlStr_strtol(const char *str, char **endptr, SINT32 base, SINT32 *val);
+UtlRet utlStr_strtoul(const char *str, char **endptr, SINT32 base, UINT32 *val);
+UtlRet utlStr_strtol64(const char *str, char **endptr, SINT32 base, SINT64 *val);
+UtlRet utlStr_strtoul64(const char *str, char **endptr, SINT32 base, UINT64 *val);
 void utlStr_strToLower(char *string);
 void utlStr_strToUpper(char *string);
 SINT32 utlStr_strcmp(const char *s1, const char *s2);

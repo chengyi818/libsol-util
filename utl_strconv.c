@@ -16,8 +16,32 @@
 #include <sys/stat.h>  /* this really should be in oal_strconv.c */
 #include <arpa/inet.h> /* for inet_aton */
 #include <sys/time.h> /* for inet_aton */
+#include "osl_strconv.h"
 #include "utl_strconv.h"
 #include "utl_logging.h"
+
+UtlRet utlStr_strtol(const char *str, char **endptr, SINT32 base, SINT32 *val)
+{
+   return(osl_strtol(str, endptr, base, val));
+}
+
+
+UtlRet utlStr_strtoul(const char *str, char **endptr, SINT32 base, UINT32 *val)
+{
+   return(osl_strtoul(str, endptr, base, val));
+}
+
+
+UtlRet utlStr_strtol64(const char *str, char **endptr, SINT32 base, SINT64 *val)
+{
+   return(osl_strtol64(str, endptr, base, val));
+}
+
+
+UtlRet utlStr_strtoul64(const char *str, char **endptr, SINT32 base, UINT64 *val)
+{
+   return(osl_strtoul64(str, endptr, base, val));
+}
 
 void utlStr_strToLower(char *string)
 {
