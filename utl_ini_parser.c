@@ -25,6 +25,11 @@ static void utl_ini_init_group_node(UtlIniGroup *node)
     dlist_add(&node->group_node, &ini_group_head);
 }
 
+static UBOOL8 utl_ini_check_value(char *key, char *value)
+{
+    return((utlStr_strlen(key) > 0) && (utlStr_strlen(value) > 0));
+}
+
 static void utl_ini_cleanup(DlistNode *head)
 {
     UtlIniGroup *group_ptr = NULL;
@@ -90,6 +95,8 @@ UBOOL8 utl_ini_parser(char* buffer, char comment_char, char delim_char, UtlIniVa
                         state = STAT_KEY;
                         key_start = p;
                     }
+                    else if(*p == delim_char)
+                        goto error;
                     break;
                 }
             case STAT_GROUP:
@@ -108,6 +115,8 @@ UBOOL8 utl_ini_parser(char* buffer, char comment_char, char delim_char, UtlIniVa
                         else
                             goto error;
                     }
+                    else if (*p == delim_char) 
+                        goto error;
                     break;
                 }
             case STAT_COMMENT:
@@ -139,13 +148,18 @@ UBOOL8 utl_ini_parser(char* buffer, char comment_char, char delim_char, UtlIniVa
                         utlStr_strTrim(value_start);
                         if (group_ptr != NULL) 
                         {
-                            if ((pair_ptr = utlMem_alloc(sizeof(UtlIniValuePair), ALLOC_ZEROIZE)) != NULL)
+                            if (utl_ini_check_value(key_start, value_start)) 
                             {
-                                pair_ptr->key = utlMem_strdup(key_start);
-                                pair_ptr->value = utlMem_strdup(value_start);
-                                dlist_add(&pair_ptr->pair_node, &group_ptr->pair_head);
-                                group_ptr->pair_num++;
-                                utlLog_debug("%s%c%s", pair_ptr->key, delim_char, pair_ptr->value);
+                                if ((pair_ptr = utlMem_alloc(sizeof(UtlIniValuePair), ALLOC_ZEROIZE)) != NULL)
+                                {
+                                    pair_ptr->key = utlMem_strdup(key_start);
+                                    pair_ptr->value = utlMem_strdup(value_start);
+                                    dlist_add(&pair_ptr->pair_node, &group_ptr->pair_head);
+                                    group_ptr->pair_num++;
+                                    utlLog_debug("%s%c%s", pair_ptr->key, delim_char, pair_ptr->value);
+                                }
+                                else
+                                    goto error;
                             }
                             else
                                 goto error;
@@ -165,13 +179,18 @@ UBOOL8 utl_ini_parser(char* buffer, char comment_char, char delim_char, UtlIniVa
         utlStr_strTrim(value_start);
         if (group_ptr != NULL) 
         {
-            if ((pair_ptr = utlMem_alloc(sizeof(UtlIniValuePair), ALLOC_ZEROIZE)) != NULL)
+            if (utl_ini_check_value(key_start, value_start)) 
             {
-                pair_ptr->key = utlMem_strdup(key_start);
-                pair_ptr->value = utlMem_strdup(value_start);
-                dlist_add(&pair_ptr->pair_node, &group_ptr->pair_head);
-                group_ptr->pair_num++;
-                utlLog_debug("%s%c%s", pair_ptr->key, delim_char, pair_ptr->value);
+                if ((pair_ptr = utlMem_alloc(sizeof(UtlIniValuePair), ALLOC_ZEROIZE)) != NULL)
+                {
+                    pair_ptr->key = utlMem_strdup(key_start);
+                    pair_ptr->value = utlMem_strdup(value_start);
+                    dlist_add(&pair_ptr->pair_node, &group_ptr->pair_head);
+                    group_ptr->pair_num++;
+                    utlLog_debug("%s%c%s", pair_ptr->key, delim_char, pair_ptr->value);
+                }
+                else
+                    goto error;
             }
             else
                 goto error;
@@ -187,7 +206,7 @@ UBOOL8 utl_ini_parser(char* buffer, char comment_char, char delim_char, UtlIniVa
     return TRUE;
 
 error:
-    utlLog_error("ini config file parse error!");
+    utlLog_error("ini config file parse error, please check config file!");
     utl_ini_cleanup(&ini_group_head);
     return FALSE;
 }
