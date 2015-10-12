@@ -224,28 +224,45 @@ IniNodeDesc groupDesc[] = {
     {NULL, NULL}
 };
 
-UBOOL8 valueHandler(UtlIniValue *pair)
+UBOOL8 pairHandler(struct __IniNodeDesc *leafDesc, DlistNode *head)
 {
-    int i,j;
+    int i;
 
-    for(i=0; groupDesc[i].tagName != NULL; i++)
+    UtlIniValuePair *pair_ptr = NULL;
+
+    dlist_for_each_entry(pair_ptr, head, pair_node)
     {
-        if(!utlStr_strcmp(pair->group, groupDesc[i].tagName))
+        for(i=0; leafDesc[i].tagName != NULL; i++)
         {
-            if(groupDesc[i].setIniFunc)
-                groupDesc[i].setIniFunc(pair->key, pair->value);
-            
-            if (groupDesc[i].leafNode) 
+            if(!utlStr_strcmp(pair_ptr->key, leafDesc[i].tagName))
             {
-                for (j = 0; groupDesc[i].leafNode[j].tagName != NULL; j++) 
-                {
-                    if(!utlStr_strcmp(pair->key, groupDesc[i].leafNode[j].tagName))
-                        groupDesc[i].leafNode[j].setIniFunc(pair->key, pair->value);
-                }
+                if(!leafDesc[i].setIniFunc(pair_ptr->key, pair_ptr->value))
+                    return FALSE;
             }
-
         }
     }
+
+    return TRUE;
+}
+
+UBOOL8 groupHandler(DlistNode *head)
+{
+    int i;
+
+    UtlIniGroup *group_ptr = NULL;
+
+    dlist_for_each_entry(group_ptr, head, group_node)
+    {
+        for(i=0; groupDesc[i].tagName != NULL; i++)
+        {
+            if(!utlStr_strcmp(group_ptr->group_name, groupDesc[i].tagName))
+            {
+                if(!pairHandler(groupDesc[i].leafNode, &group_ptr->pair_head))
+                    return FALSE;
+            }
+        }
+    }
+
     return TRUE;
 }
 
@@ -256,7 +273,7 @@ void utl_ini_parser_test(void)
     utlLog_init();
     utlLog_setLevel(LOG_LEVEL_DEBUG);
 
-    utl_ini_parser(buffer,'#','=',valueHandler);
+    utl_ini_parser(buffer,'#','=',groupHandler);
 
     utlLog_cleanup();
 }
