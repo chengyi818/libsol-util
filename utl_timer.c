@@ -62,9 +62,9 @@ static void utlTmr_add(void *handle, UtlTimerEvent *event)
 }
 
 /**
- * Removes a timer from the timerqueue.
+ * Removes a timer from the rbtree.
  *
- * Removes the timer node from the timerqueue.
+ * Removes the timer node from the rbtree.
  */
 static void utlTmr_del(void *handle, UtlTimerEvent *event)
 {
