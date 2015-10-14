@@ -14,7 +14,7 @@
 #define __UTL_PRCTL_H__
 
 #include "utl.h"
-#include "osl_prctl.h"
+#include "./os/osl_prctl.h"
 
 void utlPrctl_getProcessName(char *name);
 void utlPrctl_signalProcess(SINT32 pid, SINT32 sig);

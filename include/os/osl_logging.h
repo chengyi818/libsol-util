@@ -14,7 +14,7 @@
 #define __OSL_LOGGING_H__
 
 #include <syslog.h>
-#include "utl_logging.h"
+#include "../utl_logging.h"
 
 void oslLog_init(void);
 void oslLog_syslog(UtlLogLevel level, const char *buf);

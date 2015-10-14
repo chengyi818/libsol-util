@@ -15,7 +15,7 @@
 
 #include <sys/types.h>
 #include <unistd.h>
-#include "utl.h"
+#include "../utl.h"
 
 void oslPrctl_getPathName(pid_t pid, char *name);
 void oslPrctl_signalProcess(SINT32 pid, SINT32 sig);

@@ -13,7 +13,7 @@
 #ifndef __OSL_STRCONV_H__
 #define __OSL_STRCONV_H__
 
-#include "utl.h"
+#include "../utl.h"
 
 UtlRet osl_strtol(const char *str, char **endptr, SINT32 base, SINT32 *val);
 UtlRet osl_strtoul(const char *str, char **endptr, SINT32 base, UINT32 *val);

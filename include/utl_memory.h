@@ -14,7 +14,7 @@
 #define __UTL_MEMORY_H__
 
 #include "utl.h"
-#include "osl_memory.h"
+#include "./os/osl_memory.h"
 
 /** zeroize the buffer before returning it to the caller. */
 #define ALLOC_ZEROIZE          0x01
